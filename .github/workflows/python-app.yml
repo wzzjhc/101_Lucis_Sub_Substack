@@ -1,5 +1,6 @@
 name: Build Lucis-Sub Executable
-run-name: No${{ github.run_number }} |🚀 Build Lucis-Sub by @${{ github.actor }}
+run-name: No${{ github.run_number }} |🚀 Build Lucis-Sub by @${{ github.actor }} | ${{ github.event.repository.updated_at }}
+
 
 on:
   push:
