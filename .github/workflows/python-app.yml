@@ -1,12 +1,12 @@
 name: Build Lucis-Sub Executable
 run-name: No${{ github.run_number }} |🚀 Build Lucis-Sub by @${{ github.actor }} | ${{ github.event.repository.updated_at }}
 
-# 彻底改写：只要 main 分支有代码推上来，立刻引爆自动打包
+# 只要 main 分支有代码推上来，立刻自动打包
 on:
   push:
     branches: [ "main" ]
 
-# 必须显式声明允许此流水线向你的 Release 写入二进制资产文件
+# 显式声明允许此流水线向你的 Release 写入二进制资产文件
 permissions:
   contents: write
 
@@ -18,10 +18,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.10
+      - name: Set up Python 3.12.7
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.12.7"
 
       - name: Install dependencies
         run: |
@@ -32,19 +32,20 @@ jobs:
         run: |
           pyinstaller --onedir --noconsole --name "Lucis_Sub_Substack" --icon "favicon.ico" --add-data "favicon.ico;." --add-data "logo.png;." --add-data "like.png;." main.py
 
-      # 在工作空间内把生成的绿色文件夹压缩为独立的 zip 文件
+      # 修正点 1：将压缩路径完全对齐为真正的生成目录 dist/Lucis_Sub_Substack
       - name: Compress artifacts to Custom ZIP
         shell: powershell
         run: |
-          Compress-Archive -Path dist/Lucis-Sub/* -DestinationPath Lucis_Sub_Substack_Windows_V20260618_beta.zip
+          Compress-Archive -Path dist/Lucis_Sub_Substack -DestinationPath Lucis_Sub_Substack_Windows_V20260618_beta.zip
 
+      # 修正点 2：将上传组件的物理路径也对齐
       - name: Upload artifact to Actions Tab
         uses: actions/upload-artifact@v4
         with:
           name: 101_Lucis_Sub_Substack
           path: dist/Lucis_Sub_Substack/
 
-      # 彻底改写：去掉条件限制，每次 push 自动覆盖/更新一个名为 "latest" 的 Release
+      # 自动覆盖/更新一个名为 "latest" 的 Release
       - name: Create GitHub Release and Upload Asset
         uses: softprops/action-gh-release@v2
         with:
