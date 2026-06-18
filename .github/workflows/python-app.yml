@@ -30,7 +30,7 @@ jobs:
 
       - name: Build with PyInstaller (Onedir Mode)
         run: |
-          pyinstaller --onedir --noconsole --name "Lucis-Sub" --icon "favicon.ico" --add-data "favicon.ico;." --add-data "logo.png;." --add-data "like.png;." main.py
+          pyinstaller --onedir --noconsole --name "Lucis_Sub_Substack" --icon "favicon.ico" --add-data "favicon.ico;." --add-data "logo.png;." --add-data "like.png;." main.py
 
       # 在工作空间内把生成的绿色文件夹压缩为独立的 zip 文件
       - name: Compress artifacts to Custom ZIP
@@ -41,7 +41,7 @@ jobs:
       - name: Upload artifact to Actions Tab
         uses: actions/upload-artifact@v4
         with:
-          name: Lucis-Sub-Raw-Directory
+          name: 101_Lucis_Sub_Substack
           path: dist/Lucis-Sub/
 
       # 彻底改写：去掉条件限制，每次 push 自动覆盖/更新一个名为 "latest" 的 Release
