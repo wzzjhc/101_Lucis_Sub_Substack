@@ -42,7 +42,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: 101_Lucis_Sub_Substack
-          path: dist/Lucis-Sub/
+          path: dist/Lucis_Sub_Substack/
 
       # 彻底改写：去掉条件限制，每次 push 自动覆盖/更新一个名为 "latest" 的 Release
       - name: Create GitHub Release and Upload Asset
