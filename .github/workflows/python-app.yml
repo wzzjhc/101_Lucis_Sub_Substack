@@ -3,8 +3,8 @@ run-name: No${{ github.run_number }} |🚀 Build Lucis-Sub by @${{ github.actor 
 
 on:
   push:
-    tags: v20260618_beta
-      - 'v*'  # 当你推送以 v 开头的标签（如 v1.0, v20260618）时，自动触发打包
+    tags: 
+      - 'v20260618_beta'  # 当你推送以 v 开头的标签（如 v1.0, v20260618）时，自动触发打包
 
 # 核心修正：必须显式声明允许此流水线向你的 Release 写入二进制资产文件
 permissions:
