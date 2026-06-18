@@ -1,13 +1,12 @@
 name: Build Lucis-Sub Executable
 run-name: No${{ github.run_number }} |🚀 Build Lucis-Sub by @${{ github.actor }} | ${{ github.event.repository.updated_at }}
 
-
+# 彻底改写：只要 main 分支有代码推上来，立刻引爆自动打包
 on:
   push:
-    tags: 
-      - 'v20260618_beta'  # 当你推送以 v 开头的标签（如 v1.0, v20260618）时，自动触发打包
+    branches: [ "main" ]
 
-# 核心修正：必须显式声明允许此流水线向你的 Release 写入二进制资产文件
+# 必须显式声明允许此流水线向你的 Release 写入二进制资产文件
 permissions:
   contents: write
 
@@ -33,7 +32,7 @@ jobs:
         run: |
           pyinstaller --onedir --noconsole --name "Lucis-Sub" --icon "favicon.ico" --add-data "favicon.ico;." --add-data "logo.png;." --add-data "like.png;." main.py
 
-      # 关键步骤：在上传前，必须先在工作空间内把生成的绿色文件夹压缩为独立的 zip 文件
+      # 在工作空间内把生成的绿色文件夹压缩为独立的 zip 文件
       - name: Compress artifacts to Custom ZIP
         shell: powershell
         run: |
@@ -45,13 +44,12 @@ jobs:
           name: Lucis-Sub-Raw-Directory
           path: dist/Lucis-Sub/
 
+      # 彻底改写：去掉条件限制，每次 push 自动覆盖/更新一个名为 "latest" 的 Release
       - name: Create GitHub Release and Upload Asset
         uses: softprops/action-gh-release@v2
-        if: startsWith(github.ref, 'refs/tags/')
         with:
-          # 让 Release 下载项中直接出现你指定好名字的专属纯绿色 ZIP 包
           files: Lucis_Sub_Substack_Windows_V20260618_beta.zip
-          # 设置 Release 的大标题
           name: Lucis_Sub_Substack_Windows_V20260618_beta
+          tag_name: latest  # 固定推送到一个名为 latest 的发布位置
           draft: false
           prerelease: false
