@@ -236,7 +236,10 @@ class AboutLinkDialog(QDialog):
        
         self.link_label = QLabel(
             '🌐 服务官方主页: <a href="https://91tv.vip/" style="color: #2563eb; text-decoration: underline;">https://91tv.vip/</a><br>'
-            '💻 GitHub 项目: <a href="https://github.com/wzzjhc/101_Lucis_Sub_Substack" style="color: #2563eb; text-decoration: underline;">https://github.com/wzzjhc/101_Lucis_Sub_Substack</a>'
+            '💻 GitHub 项目: <a href="https://github.com/wzzjhc/101_Lucis_Sub_Substack" style="color: #2563eb; text-decoration: underline;">【点击并跳转，在右侧Releases处下载】</a><br>'
+            '☁️ 腾讯微云备用: <a href="https://share.weiyun.com/xjl1XWcT" style="color: #2563eb; text-decoration: underline;">【点击下载最新版本】</a>'
+            
+            
         )
         self.link_label.setOpenExternalLinks(False)
         self.link_label.linkActivated.connect(self.safely_open_url)
@@ -269,7 +272,7 @@ class AboutLinkDialog(QDialog):
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Lucis 启明_小工具 作者：胡家三少")
+        self.setWindowTitle("Lucis 启明_小工具👉作者：胡家三少")
         self.setFixedSize(720, 950)
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
         self.setStyleSheet(QSS_STYLE)
@@ -336,7 +339,7 @@ class MainWindow(QMainWindow):
         title_vbox.setSpacing(1)
         title_label = QLabel("Substack订阅者数据管理")
         title_label.setObjectName("TitleLabel")
-        subtitle_label = QLabel("Lucis 启明_小工具 作者：胡家三少")
+        subtitle_label = QLabel("Lucis 启明_小工具👉作者：胡家三少")
         subtitle_label.setObjectName("SubTitleLabel")
         title_vbox.addWidget(title_label)
         title_vbox.addWidget(subtitle_label)
@@ -449,7 +452,7 @@ class MainWindow(QMainWindow):
         param_hbox = QHBoxLayout()
         author_vbox = QVBoxLayout()
         author_vbox.addWidget(QLabel("博主:"))
-        self.cfg_author_input = QLineEdit("某样本")
+        self.cfg_author_input = QLineEdit("某人")
         author_vbox.addWidget(self.cfg_author_input)
 
         date_vbox = QVBoxLayout()
@@ -489,7 +492,7 @@ class MainWindow(QMainWindow):
         src_layout = QVBoxLayout(src_frame)
         src_layout.setContentsMargins(15, 15, 15, 15)
 
-        sec1_title = QLabel("1. 加载生成的订阅者表格 (支持拖入 或 直接点击该区域选择)")
+        sec1_title = QLabel("1. 加载生成的订阅者表格 (支持拖入)")
         sec1_title.setObjectName("SectionTitle")
         src_layout.addWidget(sec1_title)
 
@@ -519,7 +522,7 @@ class MainWindow(QMainWindow):
         query_layout = QVBoxLayout(query_frame)
         query_layout.setContentsMargins(15, 15, 15, 15)
 
-        sec2_title = QLabel("2. 精准检索定位订阅者序号")
+        sec2_title = QLabel("2. 订阅者序号")
         sec2_title.setObjectName("SectionTitle")
         query_layout.addWidget(sec2_title)
 
@@ -546,7 +549,7 @@ class MainWindow(QMainWindow):
         snap_layout.setContentsMargins(15, 15, 15, 15)
         snap_layout.setSpacing(10)
 
-        sec3_title = QLabel("3. 当前选中订阅者快照")
+        sec3_title = QLabel("3. 当前订阅者数据")
         sec3_title.setObjectName("SectionTitle")
         snap_layout.addWidget(sec3_title)
 
@@ -573,7 +576,7 @@ class MainWindow(QMainWindow):
         self.res_selfie_badge = QLabel("暂无图片")
         self.res_selfie_badge.setStyleSheet("background: #7f1d1d; color: #fca5a5; padding: 4px 12px; border-radius: 10px; font-weight: bold;")
         
-        self.btn_upload_selfie = QPushButton("📸 更换自拍")
+        self.btn_upload_selfie = QPushButton("📸 上传自拍照")
         self.btn_upload_selfie.setObjectName("BtnBlue") 
         self.btn_upload_selfie.setEnabled(False)
         self.btn_upload_selfie.clicked.connect(self.upload_selfie_image)
@@ -616,7 +619,7 @@ class MainWindow(QMainWindow):
         rem_layout.setContentsMargins(15, 15, 15, 15)
         rem_layout.setSpacing(12)
 
-        sec5_title = QLabel("5. 自定义备注介绍详情 (支持回车换行排版)")
+        sec5_title = QLabel("5. 自定义备注介绍详情")
         sec5_title.setObjectName("SectionTitle")
         rem_layout.addWidget(sec5_title)
 
@@ -627,10 +630,10 @@ class MainWindow(QMainWindow):
         rem_layout.addWidget(self.remark_textarea)
 
         action_hbox = QHBoxLayout()
-        self.check_verify = QCheckBox("处理 (打勾为已查验，不打勾为未查验)")
+        self.check_verify = QCheckBox("已查验/未查验)")
         self.check_verify.setEnabled(False)
         
-        self.btn_save_remark = QPushButton("💾 保存并回刷备注介绍")
+        self.btn_save_remark = QPushButton("💾 保存数据")
         self.btn_save_remark.setObjectName("BtnMint") 
         self.btn_save_remark.setEnabled(False)
         self.btn_save_remark.setMinimumHeight(45)
@@ -671,7 +674,7 @@ class MainWindow(QMainWindow):
         p3_cfg_layout.setContentsMargins(15, 15, 15, 15)
         p3_cfg_layout.setSpacing(12)
 
-        sec_title_p3 = QLabel("1. 自定义新表格头部配置参数")
+        sec_title_p3 = QLabel("1. 自定义合并表格头部配置参数")
         sec_title_p3.setObjectName("SectionTitle")
         p3_cfg_layout.addWidget(sec_title_p3)
 
@@ -682,7 +685,7 @@ class MainWindow(QMainWindow):
         p3_param_hbox = QHBoxLayout()
         p3_author_vbox = QVBoxLayout()
         p3_author_vbox.addWidget(QLabel("合并博主:"))
-        self.p3_cfg_author_input = QLineEdit("某样本")
+        self.p3_cfg_author_input = QLineEdit("某人")
         p3_author_vbox.addWidget(self.p3_cfg_author_input)
 
         p3_date_vbox = QVBoxLayout()
@@ -721,7 +724,7 @@ class MainWindow(QMainWindow):
         self.btn_p3_reset.clicked.connect(self.reset_page3_fields)
         self.add_button_shadow(self.btn_p3_reset)
 
-        self.btn_merge_action = QPushButton("🔀 开始融合筛选数据并重构生成新报表")
+        self.btn_merge_action = QPushButton("🔀 开始融合")
         self.btn_merge_action.setObjectName("BtnPurple")
         self.btn_merge_action.setMinimumHeight(55)
         self.btn_merge_action.clicked.connect(self.execute_merge_logic)
@@ -734,9 +737,9 @@ class MainWindow(QMainWindow):
 
         # 🎯 需求 2：把合并多份离线订阅者报表数据，这个说明移到最底部，按钮下方
         self.p3_description_label = QLabel(
-            "🔀 合并多份离线订阅者报表数据说明：<br>"
+            "🔀 合并说明：<br>"
             "1. 支持<b>批量无缝拖入</b>任意个网页文件、文本文档或直接拖入包含它们的<b>多级文件夹</b>。<br>"
-            "2. 范围控制支持混合语法，如：<b>1-25, 40-50, 66, 200</b>。<br>"
+            "2. 类似打印机页数规则输入，如：<b>1-25, 40-50, 66, 200</b>。<br>"
             "3. <b>如果范围栏留空</b>，系统会智能识别该文件中所有在第二页已被标记为<b>已查验</b>的数据进行合并。<br>"
             "4. 合并后的新表格数据，序号将自动重新从 1 开始规整排列，文件保存在第 1 个文件的相同文件夹中。"
         )
@@ -769,7 +772,7 @@ class MainWindow(QMainWindow):
                 box_layout.addWidget(lbl_title)
 
                 hb1 = QHBoxLayout()
-                drop_lbl = QLabel(f"❌ 拖入或双击此处选择第 {i+1} 份表格文件...")
+                drop_lbl = QLabel(f"❌ 拖入或单击此处选择第 {i+1} 份表格文件...")
                 drop_lbl.setObjectName("DropZoneClickable")
                 drop_lbl.setCursor(Qt.CursorShape.PointingHandCursor)
                 drop_lbl.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -780,7 +783,7 @@ class MainWindow(QMainWindow):
                 box_layout.addLayout(hb1)
 
                 hb2 = QHBoxLayout()
-                hb2.addWidget(QLabel("限定人工序号范围 (留空则默认按已查验提取):"))
+                hb2.addWidget(QLabel("输入提取范围 (留空则默认按已查验提取):"))
                 range_input = QLineEdit()
                 range_input.setPlaceholderText("例如: 1-50, 88, 120-150")
                 hb2.addWidget(range_input)
@@ -821,12 +824,12 @@ class MainWindow(QMainWindow):
         self.adjust_p3_block_count(2)  # 先恢复为2个基础块
         self.p3_files = ["", ""]
         for i, lbl in enumerate(self.p3_labels):
-            lbl.setText(f"❌ 拖入或双击此处选择第 {i+1} 份表格文件...")
+            lbl.setText(f"❌ 拖入或单击此处选择第 {i+1} 份表格文件...")
             lbl.setStyleSheet("color: #38bdf8; background-color: #020617; border-color: #3b82f6;")
         for inp in self.p3_inputs:
             inp.clear()
         self.p3_cfg_url_input.setText("https://substack.com/@样本/subscribers")
-        self.p3_cfg_author_input.setText("某样本")
+        self.p3_cfg_author_input.setText("某人")
         self.p3_cfg_date_input.setText(datetime.now().strftime("%Y年%m月%d日"))
 
     # ==============================================================================
@@ -1252,7 +1255,7 @@ class MainWindow(QMainWindow):
                 self.res_intro_label.setText(f"🔗 {intro[:25]}..." if len(intro)>25 else intro)
                 
                 if tds[5].find("img"):
-                    self.res_selfie_badge.setText("🖼️ 已挂载照片")
+                    self.res_selfie_badge.setText("🖼️ 已上传自拍照")
                     self.res_selfie_badge.setStyleSheet("background: #065f46; color: #34d399; padding: 4px 12px; border-radius: 10px; font-weight: bold;")
                 else:
                     self.res_selfie_badge.setText("暂无图片")
