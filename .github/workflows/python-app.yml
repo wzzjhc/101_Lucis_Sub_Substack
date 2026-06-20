@@ -30,7 +30,7 @@ jobs:
 
       - name: Build with PyInstaller (Onedir Mode)
         run: |
-          pyinstaller --onedir --noconsole --name "Lucis_Chat" --icon "assets/icon.ico" --add-data "assets;assets" main.py
+          pyinstaller --onedir --noconsole --name "Lucis_Sub_Substack" --icon "favicon.ico" --add-data "favicon.ico;." --add-data "logo.png;." --add-data "like.png;." main.py
           
       # 修正点 1：将压缩路径完全对齐为真正的生成目录 dist/Lucis_Sub_Substack
       - name: Compress artifacts to Custom ZIP
