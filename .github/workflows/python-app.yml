@@ -36,7 +36,7 @@ jobs:
       - name: Compress artifacts to Custom ZIP
         shell: powershell
         run: |
-          Compress-Archive -Path dist/Lucis_Sub_Substack -DestinationPath Lucis_Sub_Substack_Windows_V20260618_beta.zip
+          Compress-Archive -Path dist/Lucis_Sub_Substack -DestinationPath Lucis_Sub_Substack_Windows_V20260621_beta.zip
 
       # 修正点 2：将上传组件的物理路径也对齐
       - name: Upload artifact to Actions Tab
@@ -49,8 +49,8 @@ jobs:
       - name: Create GitHub Release and Upload Asset
         uses: softprops/action-gh-release@v2
         with:
-          files: Lucis_Sub_Substack_Windows_V20260618_beta.zip
-          name: Lucis_Sub_Substack_Windows_V20260618_beta
+          files: Lucis_Sub_Substack_Windows_V20260621_beta.zip
+          name: Lucis_Sub_Substack_Windows_V20260621_beta
           tag_name: latest  # 固定推送到一个名为 latest 的发布位置
           draft: false
           prerelease: false
