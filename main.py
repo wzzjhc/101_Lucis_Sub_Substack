@@ -312,8 +312,17 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Lucis 启明_小工具👉作者：胡家三少")
+        
+        icon_path = resource_path("favicon.ico")
+        self.setWindowIcon(QIcon(icon_path))
         self.setFixedSize(720, 950)
-        self.setWindowFlags(Qt.WindowType.FramelessWindowHint)
+        
+        # ====== 📢 核心修改点：无边框且强显任务栏图标 ======
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint | 
+                            Qt.WindowType.Window | 
+                            Qt.WindowType.WindowSystemMenuHint |
+                            Qt.WindowType.WindowMinMaxButtonsHint)
+        
         self.setStyleSheet(QSS_STYLE)
 
         # 业务缓存槽
@@ -1737,6 +1746,12 @@ class MainWindow(QMainWindow):
 # ==============================================================================
 if __name__ == "__main__":
     if sys.platform.startswith("win"):
+        # 📢 1. 强行通知 Windows 这是一个独立应用，确保无边框模式下任务栏依然独立绘制图标
+        import ctypes
+        myappid = 'hujiasanshao.lucis.substacktool.1.0'  # 你的专属独立应用ID描述
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+
+        # 🔒 2. 你原有的原子锁逻辑（保持不变）
         UNIQUE_MUTEX_NAME = "101_Lucis_Sub_Substack_91TV.VIP"
         kernel32 = ctypes.windll.kernel32
         mutex = kernel32.CreateMutexW(None, False, UNIQUE_MUTEX_NAME)
