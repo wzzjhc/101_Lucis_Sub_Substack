@@ -18,6 +18,45 @@ from PyQt6.QtWidgets import (
     QFileDialog, QMessageBox, QFrame, QScrollArea, QDialog, QGraphicsDropShadowEffect, QCheckBox
 )
 
+
+from PyQt6.QtGui import QTextDocumentFragment
+import re
+
+class SmartWhiteTextEdit(QTextEdit):
+    """ 智能文本框：无论复制什么格式，其中的中英文、数字、符号一律强制洗成白色 """
+    def insertFromMimeData(self, source):
+        # 1. 优先获取纯文本内容（这样能直接剥离网页自带的恶心颜色和背景）
+        text_content = source.text()
+        
+        if text_content:
+            # 2. 将文本中的特殊 HTML 字符（如 <, >, &）进行转义，防止破坏 HTML 结构
+            safe_text = (text_content
+                         .replace("&", "&amp;")
+                         .replace("<", "&lt;")
+                         .replace(">", "&gt;")
+                         .replace("\n", "<br>")) # 保留回车换行
+            
+            # 3. 使用标准暗黑模式高亮样式包裹，强制所有常规字符（中英数标点）变成纯白色
+            # color: #ffffff !important 确保拥有最高优先级，不被任何其他样式覆盖
+            html_content = f'<div style="color: #ffffff !important; font-family: sans-serif;">{safe_text}</div>'
+            
+            # 4. 将处理好的白色富文本片段插入到光标所在位置
+            fragment = QTextDocumentFragment.fromHtml(html_content)
+            self.textCursor().insertFragment(fragment)
+        else:
+            # 如果是其他不带文本的数据（如纯图片），走默认流程
+            super().insertFromMimeData(source)
+
+
+
+
+
+
+
+
+
+
+
 # ==============================================================================
 #  【核心动态路径支持】解决 GitHub 打包及 PyInstaller 单文件释放路径问题
 # ==============================================================================
@@ -619,29 +658,49 @@ class MainWindow(QMainWindow):
         rem_layout.setContentsMargins(15, 15, 15, 15)
         rem_layout.setSpacing(12)
 
-        sec5_title = QLabel("5. 自定义备注介绍详情")
+        sec5_title = QLabel("5. 自定义备注介绍详情_[注意!网页上复制过来的黑色字体会看不到]")
         sec5_title.setObjectName("SectionTitle")
         rem_layout.addWidget(sec5_title)
 
-        self.remark_textarea = QTextEdit()
+        self.remark_textarea = SmartWhiteTextEdit() 
+        
         self.remark_textarea.setPlaceholderText("编辑或输入该用户的自定义备注信息，允许直接按回车换行进行规整...")
         self.remark_textarea.setEnabled(False)
         self.remark_textarea.setMaximumHeight(90)
         rem_layout.addWidget(self.remark_textarea)
+        
+         
 
+       # ================== 修改后代码 ==================
         action_hbox = QHBoxLayout()
         self.check_verify = QCheckBox("已查验/未查验)")
         self.check_verify.setEnabled(False)
-        
+        action_hbox.addWidget(self.check_verify, 3) # 适当微调权重占比
+
+        # 放置两个保存按钮的右侧子布局
+        btn_sub_hbox = QHBoxLayout()
+        btn_sub_hbox.setSpacing(10) # 两个按钮之间的间距
+
+        # 1. 原有的 保存数据 按钮
         self.btn_save_remark = QPushButton("💾 保存数据")
         self.btn_save_remark.setObjectName("BtnMint") 
         self.btn_save_remark.setEnabled(False)
+       
         self.btn_save_remark.setMinimumHeight(45)
         self.btn_save_remark.clicked.connect(self.submit_remark_data)
         self.add_button_shadow(self.btn_save_remark)
-        
-        action_hbox.addWidget(self.check_verify, 4)
-        action_hbox.addWidget(self.btn_save_remark, 6)
+        btn_sub_hbox.addWidget(self.btn_save_remark)
+
+        # 2. 新增的 保存并提取下一位 按钮 (这里使用橘色或蓝色样式，比如 BtnOrange 或 BtnBlue)
+        self.btn_save_next = QPushButton("⏩ 保存并提取下一位")
+        self.btn_save_next.setObjectName("BtnOrange")  
+        self.btn_save_next.setEnabled(False)
+        self.btn_save_next.setMinimumHeight(45)
+        self.btn_save_next.clicked.connect(self.save_and_query_next_subscriber) # 绑定新编写的方法
+        self.add_button_shadow(self.btn_save_next)
+        btn_sub_hbox.addWidget(self.btn_save_next)
+
+        action_hbox.addLayout(btn_sub_hbox, 7) # 将按钮子布局加到主整行布局中
         rem_layout.addLayout(action_hbox)
         layout.addWidget(self.remark_frame)
 
@@ -1105,8 +1164,8 @@ class MainWindow(QMainWindow):
     <h2>Substack 订阅名单数据报表</h2>
     <div class="count-tip">📊 提取总人数：<span class="highlight-num-red">{total_num}</span> 人 &nbsp;&nbsp;|&nbsp;&nbsp; 拥有专属独立专栏：<span class="highlight-num-green">{sub_avatar_count}</span> 人</div>
     <div class="source-info">
-        🔗 数据源源自于：<a href="{source_url}" target="_blank">{source_url}</a><br>
-        👨‍💻 博主：{author_name} &nbsp;&nbsp;|&nbsp;&nbsp; 📅 数据下载日期：{record_date}
+        🔗 数据源源自于：<a href="{source_url}" target="_blank">{source_url}</a>
+      &nbsp;&nbsp;|&nbsp;&nbsp;   👨‍💻 博主：{author_name} &nbsp;&nbsp;|&nbsp;&nbsp; 📅 数据下载日期：{record_date}
     </div>
     <table>
         <thead>
@@ -1270,6 +1329,7 @@ class MainWindow(QMainWindow):
                 self.btn_save_url.setEnabled(True)
                 self.remark_textarea.setEnabled(True)
                 self.btn_save_remark.setEnabled(True)
+                self.btn_save_next.setEnabled(True)  # 加上这行
                 self.check_verify.setEnabled(True)
                 break
 
@@ -1290,6 +1350,7 @@ class MainWindow(QMainWindow):
         self.btn_save_url.setEnabled(False)
         self.remark_textarea.setEnabled(False)
         self.btn_save_remark.setEnabled(False)
+        self.btn_save_next.setEnabled(False)  # 加上这行
         self.check_verify.setEnabled(False)
 
     def submit_key_url_data(self):
@@ -1346,6 +1407,33 @@ class MainWindow(QMainWindow):
                 self.serial_input.selectAll()
         except Exception as e:
             self.show_message("失败", f"保存失败：{str(e)}")
+            
+            
+    def save_and_query_next_subscriber(self):
+            """ 保存当前数据，自动对序号+1并提取下一位订阅者信息 """
+            # 1. 首先执行现有的保存逻辑
+            # 注意：这里我们直接调用你原有的保存方法
+            self.submit_remark_data()
+            
+            # 2. 获取当前文本框中的序号
+            current_id_str = self.serial_input.text().strip()
+            if not current_id_str:
+                return
+                
+            try:
+                # 3. 序号自动 +1
+                next_id = int(current_id_str) + 1
+                
+                # 4. 回写到输入框中
+                self.serial_input.setText(str(next_id))
+                
+                # 5. 自动触发查询下一位数据的逻辑
+                self.query_subscriber_by_id()
+                
+            except ValueError:
+                # 如果输入的不是纯数字（比如带字母），则无法+1，弹窗提示
+                self.show_message("序号错误", "当前序号不是有效数字，无法自动递增跳转！", is_error=True)
+            
 
     def upload_selfie_image(self):
         if not self.target_tr or not self.loaded_html_path: return
